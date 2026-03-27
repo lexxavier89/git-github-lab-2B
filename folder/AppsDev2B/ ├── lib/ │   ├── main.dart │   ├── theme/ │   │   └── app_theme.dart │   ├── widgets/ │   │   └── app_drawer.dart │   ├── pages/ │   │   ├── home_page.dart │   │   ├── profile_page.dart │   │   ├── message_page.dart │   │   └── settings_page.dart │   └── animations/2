@@ -1,0 +1,4 @@
+cd ~/Desktop
+flutter create AppsDev2B
+cd AppsDev2B
+code .
