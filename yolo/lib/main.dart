@@ -17,32 +17,44 @@ class AppsDev2B extends StatelessWidget {
       title: 'AppsDev2B',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.theme,
-      // Custom Page Route Transition
       onGenerateRoute: (settings) {
         Widget page;
         switch (settings.name) {
           case '/profile':
-            page = const Scaffold(
-              appBar: null,
-              body: SafeArea(child: ProfilePage()),
+            page = Scaffold(
+              backgroundColor: AppTheme.black,
+              appBar: AppBar(
+                title: const Text('Profile'),
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back_ios_rounded),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ),
+              body: const SafeArea(child: ProfilePage()),
             );
             break;
           default:
             page = const MainShell();
         }
+
+        // Custom animated page route transition (fade + slide)
         return PageRouteBuilder(
+          settings: settings,
           pageBuilder: (_, __, ___) => page,
           transitionsBuilder: (_, animation, __, child) {
+            final fade = CurvedAnimation(
+              parent: animation,
+              curve: Curves.easeInOut,
+            );
+            final slide = Tween<Offset>(
+              begin: const Offset(0.06, 0),
+              end: Offset.zero,
+            ).animate(
+              CurvedAnimation(parent: animation, curve: Curves.easeOut),
+            );
             return FadeTransition(
-              opacity: CurvedAnimation(
-                  parent: animation, curve: Curves.easeInOut),
-              child: SlideTransition(
-                position: Tween<Offset>(
-                        begin: const Offset(0.05, 0), end: Offset.zero)
-                    .animate(CurvedAnimation(
-                        parent: animation, curve: Curves.easeOut)),
-                child: child,
-              ),
+              opacity: fade,
+              child: SlideTransition(position: slide, child: child),
             );
           },
           transitionDuration: const Duration(milliseconds: 400),
@@ -63,7 +75,13 @@ class MainShell extends StatefulWidget {
 class _MainShellState extends State<MainShell> {
   int _currentIndex = 0;
 
-  final List<String> _titles = ['Home', 'Profile', 'Messages', 'Settings'];
+  final List<String> _titles = [
+    'Home',
+    'Profile',
+    'Messages',
+    'Settings',
+  ];
+
   final List<Widget> _pages = const [
     HomePage(),
     ProfilePage(),
@@ -78,34 +96,64 @@ class _MainShellState extends State<MainShell> {
         title: Text(_titles[_currentIndex]),
         actions: [
           IconButton(
+            icon: const Icon(Icons.search_rounded),
+            onPressed: () {},
+          ),
+          IconButton(
             icon: const Icon(Icons.notifications_outlined),
             onPressed: () {},
           ),
         ],
       ),
+
       drawer: AppDrawer(
         currentIndex: _currentIndex,
         onNavigate: (index) => setState(() => _currentIndex = index),
       ),
+
+      // AnimatedSwitcher for page body (fade transition between tabs)
       body: AnimatedSwitcher(
         duration: const Duration(milliseconds: 400),
-        transitionBuilder: (child, animation) => FadeTransition(
-          opacity: animation,
-          child: child,
-        ),
+        transitionBuilder: (child, animation) {
+          return FadeTransition(
+            opacity: CurvedAnimation(
+              parent: animation,
+              curve: Curves.easeInOut,
+            ),
+            child: child,
+          );
+        },
         child: KeyedSubtree(
-          key: ValueKey(_currentIndex),
+          key: ValueKey<int>(_currentIndex),
           child: _pages[_currentIndex],
         ),
       ),
+
+      // Bottom Navigation Bar
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) => setState(() => _currentIndex = index),
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-          BottomNavigationBarItem(icon: Icon(Icons.message), label: 'Messages'),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_outlined),
+            activeIcon: Icon(Icons.home_rounded),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline_rounded),
+            activeIcon: Icon(Icons.person_rounded),
+            label: 'Profile',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.message_outlined),
+            activeIcon: Icon(Icons.message_rounded),
+            label: 'Messages',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings_outlined),
+            activeIcon: Icon(Icons.settings_rounded),
+            label: 'Settings',
+          ),
         ],
       ),
     );
