@@ -1,115 +1,42 @@
 import 'package:flutter/material.dart';
-import '../theme/app_theme.dart';
 
 class MessagePage extends StatelessWidget {
   const MessagePage({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // ── Search bar ──
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-          child: TextField(
-            style: const TextStyle(color: Colors.white),
-            decoration: InputDecoration(
-              hintText: 'Search messages...',
-              hintStyle: const TextStyle(color: Colors.white38),
-              prefixIcon:
-                  const Icon(Icons.search_rounded, color: Colors.white38),
-              filled: true,
-              fillColor: AdoTheme.card,
-              contentPadding: const EdgeInsets.symmetric(vertical: 0),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(14),
-                borderSide: BorderSide.none,
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(14),
-                borderSide: BorderSide(
-                    color: AdoTheme.accent.withOpacity(0.5), width: 1),
-              ),
-            ),
-          ),
-        ),
-
-        // ── Message list ──
-        Expanded(
-          child: ListView.separated(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            itemCount: _messages.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 2),
-            itemBuilder: (context, i) {
-              final m = _messages[i];
-              return _MessageTile(
-                name: m.$1,
-                preview: m.$2,
-                time: m.$3,
-                unread: m.$4,
-                avatarAsset: m.$5,
-              );
-            },
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-// ── Data ──────────────────────────────────────────────────────────────────
-const _messages = [
-  ('Ado Updates', 'New concert announced!', '9:41 AM', 2, 'assets/images/ado2.png'),
-  ('Fan Club', 'Did you see the MV?', '8:20 AM', 5, 'assets/images/ado1.png'),
-  ('Tour Alerts', 'Tickets on sale Friday', 'Yesterday', 0, 'assets/images/ado3.png'),
-  ('Music News', 'Billboard chart update', 'Mon', 1, 'assets/images/ado2.png'),
-  ('Ado Store', 'Your order has shipped', 'Sun', 0, 'assets/images/ado1.png'),
-  ('Community', 'Welcome new members!', 'Sat', 3, 'assets/images/ado3.png'),
-];
-
-// ── Widget ────────────────────────────────────────────────────────────────
-class _MessageTile extends StatelessWidget {
-  final String name, preview, time, avatarAsset;
-  final int unread;
-  const _MessageTile({
-    required this.name,
-    required this.preview,
-    required this.time,
-    required this.unread,
-    required this.avatarAsset,
-  });
+  static const _msgs = [
+    ('Merry',   'Hey! Did you watch the MV?',        '9:41 AM', 2, 'assets/images/merry.png'),
+    ('Keiko',   'The new song slaps so hard 🔥',     '8:20 AM', 1, 'assets/images/keiko.png'),
+    ('Lulu',    'Concert tickets are out!',           'Yesterday', 0, 'assets/images/lulu.png'),
+    ('Naima',   'Check out this fan art I made',      'Mon', 3, 'assets/images/naima.png'),
+    ('Ado Fan', 'Welcome to the fan club!',           'Sun', 0, 'assets/images/ado1.png'),
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: () {},
-        borderRadius: BorderRadius.circular(12),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+      itemCount: _msgs.length,
+      itemBuilder: (context, i) {
+        final m = _msgs[i];
+        final unread = m.$4 > 0;
+        return Container(
+          margin: const EdgeInsets.only(bottom: 6),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           decoration: BoxDecoration(
-            color: unread > 0
-                ? AdoTheme.accent.withOpacity(0.05)
-                : Colors.transparent,
+            color: unread ? const Color(0xFF4D9FFF).withOpacity(0.06) : Colors.transparent,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Row(
             children: [
               Container(
-                width: 48,
-                height: 48,
+                width: 46, height: 46,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                      color: unread > 0
-                          ? AdoTheme.accent
-                          : Colors.white12,
-                      width: 1.5),
-                  image: DecorationImage(
-                    image: AssetImage(avatarAsset),
-                    fit: BoxFit.cover,
+                    color: unread ? const Color(0xFF4D9FFF) : Colors.white12,
+                    width: 1.5,
                   ),
+                  image: DecorationImage(image: AssetImage(m.$5), fit: BoxFit.cover),
                 ),
               ),
               const SizedBox(width: 12),
@@ -117,58 +44,44 @@ class _MessageTile extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(name,
+                    Text(m.$1,
                         style: TextStyle(
                             color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: unread > 0
-                                ? FontWeight.bold
-                                : FontWeight.normal)),
-                    const SizedBox(height: 2),
-                    Text(preview,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                            fontWeight: unread ? FontWeight.bold : FontWeight.normal,
+                            fontSize: 14)),
+                    Text(m.$2,
+                        maxLines: 1, overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                            color: unread > 0
-                                ? Colors.white60
-                                : Colors.white38,
+                            color: unread ? Colors.white54 : Colors.white30,
                             fontSize: 12)),
                   ],
                 ),
               ),
-              const SizedBox(width: 8),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text(time,
+                  Text(m.$3,
                       style: TextStyle(
-                          color: unread > 0
-                              ? AdoTheme.accent
-                              : Colors.white38,
+                          color: unread ? const Color(0xFF4D9FFF) : Colors.white30,
                           fontSize: 11)),
-                  const SizedBox(height: 4),
-                  if (unread > 0)
+                  if (unread) ...[
+                    const SizedBox(height: 4),
                     Container(
-                      width: 20,
-                      height: 20,
+                      width: 18, height: 18,
                       decoration: const BoxDecoration(
-                        color: AdoTheme.accent,
-                        shape: BoxShape.circle,
-                      ),
+                          color: Color(0xFF4D9FFF), shape: BoxShape.circle),
                       child: Center(
-                        child: Text('$unread',
-                            style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 11,
-                                fontWeight: FontWeight.bold)),
+                        child: Text('${m.$4}',
+                            style: const TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.bold)),
                       ),
                     ),
+                  ],
                 ],
               ),
             ],
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
