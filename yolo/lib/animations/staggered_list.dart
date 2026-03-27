@@ -17,7 +17,7 @@ class _StaggeredListState extends State<StaggeredList>
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 1200),
+      duration: const Duration(milliseconds: 1400),
       vsync: this,
     )..forward();
   }
@@ -31,9 +31,10 @@ class _StaggeredListState extends State<StaggeredList>
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: List.generate(widget.children.length, (i) {
-        final start = i * 0.15;
-        final end = (start + 0.5).clamp(0.0, 1.0);
+        final start = (i * 0.12).clamp(0.0, 0.8);
+        final end = (start + 0.4).clamp(0.0, 1.0);
         final animation = CurvedAnimation(
           parent: _controller,
           curve: Interval(start, end, curve: Curves.easeOut),
@@ -42,7 +43,7 @@ class _StaggeredListState extends State<StaggeredList>
           opacity: animation,
           child: SlideTransition(
             position: Tween<Offset>(
-              begin: const Offset(0, 0.3),
+              begin: const Offset(0, 0.25),
               end: Offset.zero,
             ).animate(animation),
             child: widget.children[i],
