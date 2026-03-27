@@ -75,6 +75,7 @@ class _MainScaffoldState extends State<MainScaffold> {
         backgroundColor: surface,
         child: Column(
           children: [
+            // ── Header with ado1.png ──
             DrawerHeader(
               decoration: const BoxDecoration(
                 color: bg,
@@ -92,7 +93,7 @@ class _MainScaffoldState extends State<MainScaffold> {
                       shape: BoxShape.circle,
                       border: Border.all(color: accent, width: 2.5),
                       image: const DecorationImage(
-                        image: AssetImage('assets/images/ado3.png'),
+                        image: AssetImage('assets/images/ado1.png'),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -109,6 +110,8 @@ class _MainScaffoldState extends State<MainScaffold> {
                 ],
               ),
             ),
+
+            // ── Nav items ──
             Expanded(
               child: ListView.builder(
                 padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
@@ -146,6 +149,7 @@ class _MainScaffoldState extends State<MainScaffold> {
                 },
               ),
             ),
+
             const Padding(
               padding: EdgeInsets.all(16),
               child: Text('Activity1_2B · v1.0.0',
