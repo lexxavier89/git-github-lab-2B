@@ -14,59 +14,88 @@ class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final items = [
-      {'icon': Icons.home, 'label': 'Home', 'index': 0},
-      {'icon': Icons.person, 'label': 'Profile', 'index': 1},
-      {'icon': Icons.message, 'label': 'Messages', 'index': 2},
-      {'icon': Icons.settings, 'label': 'Settings', 'index': 3},
+      {'icon': Icons.home_rounded, 'label': 'Home', 'index': 0},
+      {'icon': Icons.person_rounded, 'label': 'Profile', 'index': 1},
+      {'icon': Icons.message_rounded, 'label': 'Messages', 'index': 2},
+      {'icon': Icons.settings_rounded, 'label': 'Settings', 'index': 3},
     ];
 
     return Drawer(
       child: Column(
         children: [
+          // Drawer Header with background image
           DrawerHeader(
+            padding: EdgeInsets.zero,
             decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [AppTheme.darkRed, AppTheme.black],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+              image: DecorationImage(
+                image: AssetImage('assets/images/persona.png'),
+                fit: BoxFit.cover,
+                alignment: Alignment.topCenter,
               ),
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Hero(
-                  tag: 'avatar',
-                  child: CircleAvatar(
-                    radius: 36,
-                    backgroundColor: AppTheme.red,
-                    child: const Icon(Icons.person, size: 40, color: Colors.white),
-                  ),
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.transparent,
+                    Colors.black.withOpacity(0.8),
+                  ],
                 ),
-                const SizedBox(height: 8),
-                const Text(
-                  'AppsDev2B',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.5,
+              ),
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Hero(
+                    tag: 'avatar',
+                    child: CircleAvatar(
+                      radius: 36,
+                      backgroundImage:
+                          const AssetImage('assets/images/furper5.png'),
+                    ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 8),
+                  const Text(
+                    'AppsDev2B',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.5,
+                    ),
+                  ),
+                  const Text(
+                    'Phantom Thieves',
+                    style: TextStyle(
+                      color: AppTheme.red,
+                      fontSize: 12,
+                      letterSpacing: 1.2,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
+
+          // Nav Items
           Expanded(
             child: ListView.builder(
+              padding: const EdgeInsets.symmetric(vertical: 8),
               itemCount: items.length,
               itemBuilder: (context, i) {
                 final item = items[i];
                 final isSelected = currentIndex == item['index'];
                 return AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
-                  margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                   decoration: BoxDecoration(
-                    color: isSelected ? AppTheme.red.withOpacity(0.2) : Colors.transparent,
-                    borderRadius: BorderRadius.circular(10),
+                    color: isSelected
+                        ? AppTheme.red.withOpacity(0.15)
+                        : Colors.transparent,
+                    borderRadius: BorderRadius.circular(12),
                     border: isSelected
                         ? Border.all(color: AppTheme.red, width: 1)
                         : null,
@@ -80,9 +109,15 @@ class AppDrawer extends StatelessWidget {
                       item['label'] as String,
                       style: TextStyle(
                         color: isSelected ? AppTheme.red : Colors.white70,
-                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                        fontWeight: isSelected
+                            ? FontWeight.bold
+                            : FontWeight.normal,
                       ),
                     ),
+                    trailing: isSelected
+                        ? const Icon(Icons.chevron_right,
+                            color: AppTheme.red, size: 18)
+                        : null,
                     onTap: () {
                       Navigator.pop(context);
                       onNavigate(item['index'] as int);
@@ -92,10 +127,16 @@ class AppDrawer extends StatelessWidget {
               },
             ),
           ),
-          const Divider(color: Colors.grey),
+
+          const Divider(color: Colors.grey, height: 1),
+
+          // Logout
           ListTile(
-            leading: const Icon(Icons.logout, color: Colors.redAccent),
-            title: const Text('Logout', style: TextStyle(color: Colors.redAccent)),
+            leading: const Icon(Icons.logout_rounded, color: Colors.redAccent),
+            title: const Text(
+              'Logout',
+              style: TextStyle(color: Colors.redAccent),
+            ),
             onTap: () => Navigator.pop(context),
           ),
           const SizedBox(height: 12),
