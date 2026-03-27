@@ -1,0 +1,14 @@
+AppsDev2B/
+├── lib/
+│   ├── main.dart
+│   ├── theme/
+│   │   └── app_theme.dart
+│   ├── widgets/
+│   │   └── app_drawer.dart
+│   ├── pages/
+│   │   ├── home_page.dart
+│   │   ├── profile_page.dart
+│   │   ├── message_page.dart
+│   │   └── settings_page.dart
+│   └── animations/
+│       └── staggered_list.dart
