@@ -24,14 +24,15 @@ class AppTheme {
             color: white,
             fontSize: 20,
             fontWeight: FontWeight.bold,
-            letterSpacing: 1.2,
+            letterSpacing: 1.5,
           ),
         ),
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          backgroundColor: surface,
+          backgroundColor: Color(0xFF1A1A1A),
           selectedItemColor: red,
           unselectedItemColor: Colors.grey,
           type: BottomNavigationBarType.fixed,
+          selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
         ),
         drawerTheme: const DrawerThemeData(
           backgroundColor: Color(0xFF1A1A1A),
@@ -39,6 +40,12 @@ class AppTheme {
         floatingActionButtonTheme: const FloatingActionButtonThemeData(
           backgroundColor: red,
           foregroundColor: white,
+        ),
+        cardTheme: CardTheme(
+          color: surface,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
         ),
       );
 }
